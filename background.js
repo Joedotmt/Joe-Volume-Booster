@@ -10,19 +10,21 @@ function initialize()
     switch (request.message)
     {
       case "loaded":
-        console.log("tab loaded, changing volume of tab id:", sender.tab.id);
-        updateVol();
+        if (isEnabled)
+        {
+          console.log("tab loaded, changing volume of tab id:", sender.tab.id);
+          updateVol();
+        }
         break;
       case "sliderchange":
-        volumeMultiplier = request.value;
-        updateVol();
+        if (isEnabled)
+        {
+          volumeMultiplier = request.value;
+          updateVol();
+        }
         break;
       case "enabled":
         isEnabled = request.value;
-        if (isEnabled == false)
-        {
-
-        }
         break;
       default:
         break;
@@ -41,7 +43,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
 
 function updateVol()
 {
-  // wont work if volume level is a string
   volumeMultiplier = parseFloat(volumeMultiplier);
   updateBadge(volumeMultiplier, isEnabled);
 
@@ -50,15 +51,28 @@ function updateVol()
   {
     tabs.forEach(function (tab)
     {
+      // Skip chrome:// and edge:// pages
+      if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('edge://'))
+      {
+        return;
+      }
+
+      // Send message with error handling
       chrome.tabs.sendMessage(tab.id, {
         message: "set_volume_level",
         value: actualVal,
+      }).catch(error =>
+      {
+        // Silently ignore "receiving end does not exist" errors
+        if (!error.message.includes('Receiving end does not exist'))
+        {
+          console.error(`Error sending message to tab ${tab.id}:`, error);
+        }
       });
     });
   });
-
-
 }
+
 // Sets the multiplier badge text
 function updateBadge(multiplierValue, isEnabled)
 {
