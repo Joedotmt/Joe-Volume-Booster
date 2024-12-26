@@ -9,12 +9,14 @@ function updateOutputPosition()
     const outputWidth = output.offsetWidth;
     const thumbOffset = thumbPosition * (sliderRect.width - 24); // 24px is thumb width
 
-    // Center the output horizontally over the thumb
+    // Center the output horizontally over the handle
     const centerOffset = thumbOffset + (sliderRect.left + 12); // 12px is half of thumb width
 
     output.style.left = `${centerOffset - (outputWidth / 2)}px`; // Center the output horizontally
     output.style.top = `${sliderRect.top - 50}px`; // Position the output above the slider
-    slider.style.setProperty('--slider-value', slider.value);
+
+    // Make the left background of the slider end at (around) the center of the handle
+    slider.style.setProperty('--slider-value', (thumbPosition * sliderRect.width) + (thumbPosition < 0.5 ? 5 : -5));
 }
 
 
