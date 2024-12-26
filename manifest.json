@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Joe Super Vol",
+  "name": "Simple Volume Booster",
   "version": "2.1",
   "description": "A Chrome extension for Dejan",
   "icons": {
