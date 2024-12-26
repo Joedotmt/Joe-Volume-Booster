@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Joe Super Vol",
+  "version": "2",
+  "description": "A Chrome extension for Dejan",
+  "icons": {
+    "128": "icon.png"
+  },
+  "action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "tabs"
+  ]
+}

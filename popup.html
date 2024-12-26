@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup</title>
+    <style>
+        body {
+            --md-sys-color-background: 255, 251, 254;
+            --md-sys-color-on-background: 28, 27, 31;
+            --md-sys-color-primary: 103, 81, 164;
+            --md-sys-color-primary-container: 234, 221, 255;
+            --md-sys-color-on-primary-container: 33, 0, 94;
+            --md-sys-color-on-primary: 255, 255, 255;
+            --md-sys-color-secondary: 98, 91, 113;
+            --md-sys-color-secondary-container: 232, 222, 248;
+            --md-sys-color-on-secondary-container: 30, 25, 43;
+            --md-sys-color-surface: 255, 251, 254;
+            --md-sys-color-on-surface: 28, 27, 31;
+            --md-sys-color-surface-variant: 231, 224, 236;
+            --md-sys-color-on-surface-variant: 73, 69, 78;
+            --md-sys-color-surface-tint: var(--md-sys-color-primary);
+            --md-sys-color-outline: 121, 116, 126;
+        }
+
+        body.dark {
+            --md-sys-color-background: 28, 27, 31;
+            --md-sys-color-on-background: 230, 225, 229;
+            --md-sys-color-primary: 208, 188, 255;
+            --md-sys-color-primary-container: 79, 55, 139;
+            --md-sys-color-on-primary-container: 234, 221, 255;
+            --md-sys-color-on-primary: 55, 30, 115;
+            --md-sys-color-secondary: 204, 194, 220;
+            --md-sys-color-secondary-container: 74, 68, 88;
+            --md-sys-color-on-secondary-container: 232, 222, 248;
+            --md-sys-color-surface: 28, 27, 31;
+            --md-sys-color-on-surface: 230, 225, 229;
+            --md-sys-color-surface-variant: 73, 69, 79;
+            --md-sys-color-on-surface-variant: 202, 196, 208;
+            --md-sys-color-surfac-tint: var(--md-sys-color-primary);
+            --md-sys-color-outline: 147, 143, 153;
+        }
+
+        body {
+            background-color: rgb(var(--md-sys-color-background));
+            transition: background-color .1s ease-in-out;
+            color: rgb(var(--md-sys-color-on-background));
+            user-select: none;
+            width: 500px;
+            height: fit-content;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            line-height: 32px;
+        }
+
+        .md3.switch {
+            user-select: none;
+            position: relative;
+            height: 32px;
+            width: 50px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .md3.switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* track */
+        .md3.switch span.slider {
+            position: absolute;
+            cursor: pointer;
+            background-color: rgb(var(--md-sys-color-surface-variant));
+            width: 48px;
+            height: 28px;
+            border-radius: 28px;
+            border: 2px solid rgb(var(--md-sys-color-outline));
+            transition: background-color .1s ease-in-out,
+                border-color .1s ease-in-out;
+        }
+
+        /* thumb */
+        .md3.switch span.slider::before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 0px;
+            margin: 6px;
+            background-color: rgb(var(--md-sys-color-outline));
+            border-radius: 28px;
+            transition: left 175ms cubic-bezier(0, .5, .5, 1),
+                background-color .1s ease-in-out,
+                height 50ms ease-in-out,
+                width 50ms ease-in-out,
+                margin 50ms ease-in-out;
+        }
+
+        /* icon */
+        .md3.switch span.slider span.icon {
+            position: relative;
+            left: 0px;
+            margin: 6px 0px;
+            height: 16px;
+            width: 16px;
+            font-size: 16px;
+            text-align: center;
+            opacity: 0;
+            transition: left 175ms cubic-bezier(0, .5, .5, 1);
+            color: rgb(var(--md-sys-color-surface-variant));
+        }
+
+        /* active track */
+        .md3.switch input:checked+span.slider {
+            background-color: rgb(var(--md-sys-color-primary));
+            border-color: transparent;
+        }
+
+        /* active thumb */
+        .md3.switch input:checked+span.slider::before {
+            background-color: rgb(var(--md-sys-color-on-primary));
+            height: 24px;
+            width: 24px;
+            left: 20px;
+            margin: 2px;
+        }
+
+        /* hover thumb */
+        .md3.switch input:not(:disabled):hover+span.slider::before {
+            background-color: rgb(var(--md-sys-color-on-surface-variant));
+        }
+
+        /* active hover thumb */
+        .md3.switch input:not(:disabled):checked:hover+span.slider::before {
+            background-color: rgb(var(--md-sys-color-primary-container));
+        }
+
+        /* click thumb */
+        .md3.switch input:not(:disabled):active+span.slider::before {
+            height: 28px;
+            width: 28px;
+            margin: 0px;
+        }
+
+        /* active click thumb */
+        .md3.switch input:not(:disabled):checked:active+span.slider::before {
+            background-color: rgb(var(--md-sys-color-primary-container));
+        }
+
+        /* active icon */
+        .md3.switch input:checked+span.slider span.icon {
+            left: 26px;
+            opacity: 1;
+            color: rgb(var(--md-sys-color-on-primary-container));
+        }
+
+        /* disabled track */
+        .md3.switch input:disabled+span {
+            cursor: not-allowed;
+        }
+
+        .md3.switch input:disabled+span.slider {
+            background-color: rgba(var(--md-sys-color-surface-variant), .12);
+            border-color: rgba(var(--md-sys-color-on-surface), .12);
+        }
+
+        .md3.switch input:disabled:checked+span.slider {
+            background-color: rgba(var(--md-sys-color-on-surface), .12);
+            border-color: rgba(var(--md-sys-color-on-surface), 0);
+        }
+
+        /* disabled thumb */
+        .md3.switch input:disabled+span.slider::before {
+            background-color: rgba(var(--md-sys-color-on-surface), .38);
+        }
+
+        .md3.switch input:disabled:checked+span.slider::before {
+            background-color: rgba(var(--md-sys-color-surface), 1);
+        }
+
+        /* disabled icon */
+        .md3.switch input:disabled:checked+span.slider span.icon {
+            color: rgba(var(--md-sys-color-on-surface), .38);
+        }
+
+        .md3.switch input:focus-visible+span.slider {
+            outline: 2px solid rgb(var(--md-sys-color-primary));
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 48
+        }
+
+        .slider-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 20px;
+            background: rgb(var(--md-sys-color-surface-variant));
+            outline: none;
+            margin: 25px 0;
+            position: relative;
+            background: linear-gradient(to right,
+                    rgb(var(--md-sys-color-primary)) 0%,
+                    rgb(var(--md-sys-color-primary)) calc(var(--slider-value) * 1%),
+                    rgb(var(--md-sys-color-surface-variant)) calc(var(--slider-value) * 1%),
+                    rgb(var(--md-sys-color-surface-variant)) 100%);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgb(var(--md-sys-color-primary));
+            cursor: pointer;
+            transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover effects */
+        input[type="range"]:hover::-webkit-slider-thumb {
+            transform: scale(1.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Active state */
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+            background: rgb(var(--md-sys-color-primary));
+        }
+
+        input[type="range"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+
+            background: linear-gradient(to right,
+                    rgb(var(--md-sys-color-outline)) 0%,
+                    rgb(var(--md-sys-color-outline)) calc(var(--slider-value) * 1%),
+                    rgb(var(--md-sys-color-surface-variant)) calc(var(--slider-value) * 1%),
+                    rgb(var(--md-sys-color-surface-variant)) 100%);
+        }
+
+        input[type="range"]:disabled::-webkit-slider-thumb {
+            background: rgb(var(--md-sys-color-outline));
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+
+
+        /* Output value styling */
+        #output {
+            position: fixed;
+            padding: 8px;
+            font-size: 1.5em;
+            background: rgb(var(--md-sys-color-on-surface-variant));
+            color: rgb(var(--md-sys-color-on-primary));
+            border-radius: 40px;
+            width: 2.5em;
+            text-align: center;
+            transition: opacity 175ms cubic-bezier(0, .5, .5, 1), scale 175ms cubic-bezier(0, .5, .5, 1), translate 175ms cubic-bezier(0, .5, .5, 1);
+            pointer-events: none;
+            white-space: nowrap;
+            opacity: 1;
+            scale: 1;
+        }
+
+        input[type="range"]:not(:disabled):active+#output {
+            scale: 1.1;
+            translate: 0px -3px;
+        }
+
+        input[type="range"]:disabled+#output {
+            opacity: 0.5;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=check" />
+</head>
+<body style="display: flex; flex-direction: column;">
+
+    <span style="font-size: 2em; margin: 1em; translate: 1em;">Activate Joe Super Vol Boost</span>
+    <span style="height: 50px; position: fixed; right: 9em; top:2.5em">
+        <label class="md3 switch">
+            <input id="checkbox" type="checkbox">
+            <span class="slider">
+                <span class="material-symbols-outlined icon">
+                    check
+                </span>
+            </span>
+        </label>
+    </span>
+
+    <div class="slider-container">
+        <input type="range" id="slider" min="0" max="100" step="1" disabled>
+        <span id="output">?x</span>
+    </div>
+
+
+    <script src="popup.js"></script>
+</body>
+</html>
